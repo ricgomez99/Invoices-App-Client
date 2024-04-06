@@ -1,10 +1,12 @@
 import './App.css'
+import { RouterProvider } from 'react-router-dom'
+import { routes } from './routes/Routes'
 
 function App() {
   return (
     <>
       <div className="mx-auto flex justify-center align-middle">
-        <h1>Hello World!</h1>
+        <RouterProvider router={routes} />
       </div>
     </>
   )
