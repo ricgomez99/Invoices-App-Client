@@ -6,6 +6,7 @@ export const AuthContext = createContext({
   getRefreshToken: () => {},
   saveTokens: ({ access, refresh }) => {},
   refreshAccessToken: (newToken) => {},
+  removeAuth: () => {},
 })
 
 export function AuthProvider({ children }) {
@@ -31,6 +32,11 @@ export function AuthProvider({ children }) {
     setIsAuthenticated(true)
   }
 
+  const removeAuth = () => {
+    setIsAuthenticated(false)
+    localStorage.removeItem('token')
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -39,6 +45,7 @@ export function AuthProvider({ children }) {
         getRefreshToken,
         saveTokens,
         refreshAccessToken,
+        removeAuth,
       }}
     >
       {children}
