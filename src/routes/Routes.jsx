@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom'
 import { ProtectedRoutes } from './ProtectedRoutes'
+import PersistLogin from '../hooks/PersistLogin'
 import Home from '../pages/Home'
 import Dashboard from '../pages/Dashboard'
 import Login from '../pages/Login'
@@ -15,7 +16,11 @@ export const routes = createBrowserRouter([
   },
   {
     path: '/',
-    element: <ProtectedRoutes />,
+    element: (
+      <PersistLogin>
+        <ProtectedRoutes />
+      </PersistLogin>
+    ),
     children: [
       {
         path: '/dashboard',

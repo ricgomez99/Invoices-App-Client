@@ -24,7 +24,6 @@ export default function LoginForm() {
     try {
       const { accessToken, refreshToken } = await signInUser({ query })
       if (accessToken && refreshToken) {
-        console.log(refreshToken)
         saveTokens({ access: accessToken, refresh: refreshToken })
         goTo('/dashboard')
       }

@@ -11,9 +11,11 @@ export const AuthContext = createContext({
 
 export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [accessToken, setAccessToken] = useState('')
+  const [accessToken, setAccessToken] = useState({
+    accessToken: '',
+  })
 
-  const getAccessToken = () => accessToken
+  const getAccessToken = () => accessToken.accessToken
 
   const getRefreshToken = () => {
     const refreshToken = localStorage.getItem('token')
@@ -22,7 +24,7 @@ export function AuthProvider({ children }) {
   }
 
   const saveTokens = ({ access, refresh }) => {
-    setAccessToken(access)
+    setAccessToken((prev) => ({ ...prev, accessToken: access }))
     localStorage.setItem('token', refresh)
     setIsAuthenticated(true)
   }
