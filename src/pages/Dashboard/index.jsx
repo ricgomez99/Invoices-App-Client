@@ -1,5 +1,6 @@
 import useLogout from '../../hooks/useLogout'
 import { useNavigate } from 'react-router-dom'
+import InvoicesBoard from '../../components/InvoicesBoard'
 
 export default function Dashboard() {
   const logOut = useLogout()
@@ -12,8 +13,9 @@ export default function Dashboard() {
 
   return (
     <>
-      <section className="flex mx-auto justify-center align-middle">
+      <section className="flex flex-col mx-auto justify-center align-middle">
         <h1>Dashboard</h1>
+        <InvoicesBoard />
         <button type="button" onClick={handleSignOut}>
           Sign out
         </button>
