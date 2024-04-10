@@ -9,9 +9,9 @@ export const signInUser = async ({ query }) => {
       },
     })
     if (!data) return null
-    const { accessToken, refreshToken } = data
+    const { accessToken, refreshToken, role } = data
 
-    return { accessToken, refreshToken }
+    return { accessToken, refreshToken, role }
   } catch (error) {
     if (error instanceof AxiosError) {
       console.log(error)
@@ -45,11 +45,11 @@ export const refreshToken = async (token) => {
   }
 }
 
-export const logout = async (token) => {
+export const logout = async (refreshToken) => {
   try {
     const request = await axios.post(
       `${url}/auth/logout`,
-      { refreshToken: token },
+      { token: refreshToken },
       {
         headers: {
           'Content-Type': 'application/json',

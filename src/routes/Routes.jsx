@@ -2,30 +2,34 @@ import { createBrowserRouter } from 'react-router-dom'
 import { ProtectedRoutes } from './ProtectedRoutes'
 import PersistLogin from '../hooks/PersistLogin'
 import Home from '../pages/Home'
-import Dashboard from '../pages/Dashboard'
 import Login from '../pages/Login'
+import Dashboard from '../pages/Dashboard'
 
-export const routes = createBrowserRouter([
-  {
-    path: '/',
-    element: <Home />,
-  },
-  {
-    path: '/login',
-    element: <Login />,
-  },
-  {
-    path: '/',
-    element: (
-      <PersistLogin>
-        <ProtectedRoutes />
-      </PersistLogin>
-    ),
-    children: [
-      {
-        path: '/dashboard',
-        element: <Dashboard />,
-      },
-    ],
-  },
-])
+export default function Routes() {
+  const routes = createBrowserRouter([
+    {
+      path: '/',
+      element: <Home />,
+    },
+    {
+      path: '/login',
+      element: <Login />,
+    },
+    {
+      path: '/',
+      element: (
+        <PersistLogin>
+          <ProtectedRoutes />
+        </PersistLogin>
+      ),
+      children: [
+        {
+          path: `/dashboard`,
+          element: <Dashboard />,
+        },
+      ],
+    },
+  ])
+
+  return routes
+}

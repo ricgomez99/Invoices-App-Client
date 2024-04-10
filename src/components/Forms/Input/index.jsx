@@ -1,4 +1,6 @@
-export default function Input({
+import { Typography } from '@material-tailwind/react'
+
+export default function InputField({
   value,
   handleChange,
   type,
@@ -7,16 +9,19 @@ export default function Input({
   name,
 }) {
   return (
-    <div className="flex flex-col mt-[10px] mx-0">
-      <label className="flex align-baseline">{title}</label>
+    <>
+      <Typography variant="h6" color="gray" className="-mb-3">
+        {title}
+      </Typography>
       <input
-        className="text-[#111] py-2 px-1"
+        className="text-[#111] p-2 border-2 border-gray-500 rounded-md"
+        size="md"
         type={type}
         name={name}
         value={value}
         placeholder={placeholder}
         onChange={handleChange}
       />
-    </div>
+    </>
   )
 }
