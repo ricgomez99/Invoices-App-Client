@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import Input from '../Input'
-import Button from '../../Button'
 import { signInUser } from '../../../lib/helpers'
 import { useAuth } from '../../../hooks/useAuth'
 import { useNavigate } from 'react-router-dom'
+import { Card, Button } from '@material-tailwind/react'
 
 export default function LoginForm() {
   const [query, setQuery] = useState({
@@ -11,7 +11,7 @@ export default function LoginForm() {
     password: '',
   })
 
-  const { saveTokens } = useAuth()
+  const { saveTokens, saveUserRole } = useAuth()
   const goTo = useNavigate()
 
   const handleChange = (event) => {
@@ -22,7 +22,8 @@ export default function LoginForm() {
   const handleSubmit = async (event) => {
     event.preventDefault()
     try {
-      const { accessToken, refreshToken } = await signInUser({ query })
+      const { accessToken, refreshToken, role } = await signInUser({ query })
+      saveUserRole(role)
       if (accessToken && refreshToken) {
         saveTokens({ access: accessToken, refresh: refreshToken })
         goTo('/dashboard')
@@ -36,24 +37,45 @@ export default function LoginForm() {
   }
 
   return (
-    <form className="flex flex-col justify-between" onSubmit={handleSubmit}>
-      <Input
-        value={query.email}
-        name="email"
-        placeholder="Email"
-        title="Email"
-        type="text"
-        handleChange={handleChange}
+    <Card
+      color="white"
+      shadow={true}
+      className="text-left p-4 w-80 max-w-[450px] min-w-64 h-auto max-h-96 min-h-60 flex justify-center"
+    >
+      <img
+        className="w-[100%] h-[50px] object-contain"
+        alt="AIMED EDGE LOGO"
+        src="https://aimedgeapps.com/wp-content/uploads/2021/12/Captura-de-pantalla-2021-12-15-131916.jpg"
       />
-      <Input
-        value={query.password}
-        name="password"
-        placeholder="Password"
-        title="Password"
-        type="password"
-        handleChange={handleChange}
-      />
-      <Button type="submit">Sign in</Button>
-    </form>
+
+      <form
+        className="my-3 w-[100%] max-w-[450px] min-w-64"
+        onSubmit={handleSubmit}
+      >
+        <div className="mb-1 w-[100%] flex flex-col gap-4">
+          <Input
+            value={query.email}
+            name="email"
+            placeholder="Email"
+            title="Email"
+            type="text"
+            handleChange={handleChange}
+          />
+          <Input
+            value={query.password}
+            name="password"
+            placeholder="Password"
+            title="Password"
+            type="password"
+            handleChange={handleChange}
+          />
+        </div>
+        <div className="flex justify-center items-center mt-5">
+          <Button type="submit" className="w-[100%]">
+            Sign in
+          </Button>
+        </div>
+      </form>
+    </Card>
   )
 }

@@ -4,7 +4,9 @@ export const AuthContext = createContext({
   isAuthenticated: false,
   getAccessToken: () => {},
   getRefreshToken: () => {},
+  getUserRole: () => {},
   saveTokens: ({ access, refresh }) => {},
+  saveUserRole: (userRole) => {},
   refreshAccessToken: (newToken) => {},
   removeAuth: () => {},
 })
@@ -23,10 +25,20 @@ export function AuthProvider({ children }) {
     return refreshToken !== null ? refreshToken : null
   }
 
+  const getUserRole = () => {
+    const role = localStorage.getItem('role')
+
+    return role !== null ? role : null
+  }
+
   const saveTokens = ({ access, refresh }) => {
     setAccessToken((prev) => ({ ...prev, accessToken: access }))
     localStorage.setItem('token', refresh)
     setIsAuthenticated(true)
+  }
+
+  const saveUserRole = (userRole) => {
+    localStorage.setItem('role', userRole)
   }
 
   const refreshAccessToken = (newToken) => {
@@ -37,6 +49,7 @@ export function AuthProvider({ children }) {
   const removeAuth = () => {
     setIsAuthenticated(false)
     localStorage.removeItem('token')
+    localStorage.removeItem('role')
   }
 
   return (
@@ -45,7 +58,9 @@ export function AuthProvider({ children }) {
         isAuthenticated,
         getAccessToken,
         getRefreshToken,
+        getUserRole,
         saveTokens,
+        saveUserRole,
         refreshAccessToken,
         removeAuth,
       }}

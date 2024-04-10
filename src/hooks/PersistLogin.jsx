@@ -5,6 +5,7 @@ import useRefreshToken from './useRefreshToken'
 export default function PersistLogin({ children }) {
   const [loading, setLoading] = useState(true)
   const { getAccessToken } = useAuth()
+
   const currentAccessToken = getAccessToken()
   const refresh = useRefreshToken()
 
