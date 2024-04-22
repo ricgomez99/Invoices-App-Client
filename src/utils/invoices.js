@@ -22,6 +22,26 @@ export const getInvoices = async (authToken) => {
   }
 }
 
+export const createInvoice = async ({ authToken, invoiceData }) => {
+  try {
+    const { data } = await axios.post(`${url}/invoices`, invoiceData, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${authToken}`,
+      },
+    })
+
+    if (!data) return null
+    return data
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      console.log(error)
+    } else if (error instanceof Error) {
+      console.log(error.message)
+    }
+  }
+}
+
 const mapInvoices = (invoices) => {
   return (
     invoices &&

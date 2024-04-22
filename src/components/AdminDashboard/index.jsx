@@ -5,10 +5,14 @@ import InvoicesBoard from './../InvoicesBoard/index'
 import { useState } from 'react'
 import AddInvoice from '../Modals/AddInvoice'
 import { GrAdd } from 'react-icons/gr'
+import useProducts from './../../hooks/useProducts'
+import useUsers from '../../hooks/useUsers'
 
 export default function AdminDashboard() {
   const [open, setIsOpen] = useState(false)
   const handleOpenForm = () => setIsOpen(!open)
+  const users = useUsers()
+  const products = useProducts()
 
   const logOut = useLogout()
   const goTo = useNavigate()
@@ -34,7 +38,14 @@ export default function AdminDashboard() {
       <Button size="md" className="my-4" onClick={handleSignOut}>
         Logout
       </Button>
-      {open ? <AddInvoice open={open} handler={handleOpenForm} /> : null}
+      {open ? (
+        <AddInvoice
+          open={open}
+          handler={handleOpenForm}
+          products={products}
+          users={users}
+        />
+      ) : null}
     </>
   )
 }
