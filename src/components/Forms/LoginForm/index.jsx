@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import Input from '../Input'
 import { signInUser } from '../../../lib/helpers'
 import { useAuth } from '../../../hooks/useAuth'
 import { useNavigate } from 'react-router-dom'
 import { Card, Button } from '@material-tailwind/react'
+import InputField from './../Input/index'
 
 export default function LoginForm() {
   const [query, setQuery] = useState({
@@ -53,7 +53,7 @@ export default function LoginForm() {
         onSubmit={handleSubmit}
       >
         <div className="mb-1 w-[100%] flex flex-col gap-4">
-          <Input
+          <InputField
             value={query.email}
             name="email"
             placeholder="Email"
@@ -61,7 +61,7 @@ export default function LoginForm() {
             type="text"
             handleChange={handleChange}
           />
-          <Input
+          <InputField
             value={query.password}
             name="password"
             placeholder="Password"

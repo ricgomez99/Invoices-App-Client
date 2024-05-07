@@ -1,4 +1,4 @@
-import { Typography } from '@material-tailwind/react'
+import { Typography, Input } from '@material-tailwind/react'
 
 export default function InputField({
   value,
@@ -10,11 +10,11 @@ export default function InputField({
 }) {
   return (
     <>
-      <Typography variant="h6" color="gray" className="-mb-3">
+      <Typography variant="h6" color="gray" className="font-bold">
         {title}
       </Typography>
-      <input
-        className="text-[#111] p-2 border-2 border-gray-500 rounded-md"
+      <Input
+        className="text-[#111] p-2"
         size="md"
         type={type}
         name={name}

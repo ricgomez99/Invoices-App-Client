@@ -2,16 +2,16 @@ import {
   Card,
   Dialog,
   Typography,
-  Input,
   Button,
   CardBody,
-  Select,
-  Option,
 } from '@material-tailwind/react'
 import { BsFillPlusSquareFill, BsDashSquareFill } from 'react-icons/bs'
-import React, { useRef, useState } from 'react'
+import { useRef, useState, useCallback } from 'react'
 import { createInvoice } from '../../../utils/invoices'
 import { useAuth } from '../../../hooks/useAuth'
+import useUpdateProduct from '../../../hooks/useUpdateProduct'
+import InputField from '../../Forms/Input'
+import SelectField from '../../Forms/Select'
 
 export default function AddInvoice({ open, handler, products, users }) {
   const [counter, setCounter] = useState(0)
@@ -25,6 +25,15 @@ export default function AddInvoice({ open, handler, products, users }) {
   const [total, setTotal] = useState(0)
   const { getAccessToken } = useAuth()
   const authToken = getAccessToken()
+  const updateQuantity = useUpdateProduct()
+
+  const quantity = useRef(0)
+  const addQuantity = () => setCounter((quantity.current += 1))
+  const removeQuantity = () =>
+    counter > 0 ? setCounter((quantity.current -= 1)) : null
+
+  const addCallBack = useCallback(addQuantity, [quantity, counter])
+  const removeCallBack = useCallback(removeQuantity, [quantity, counter])
 
   const handleQueryChange = (event) => {
     const { name, value } = event.target
@@ -71,22 +80,25 @@ export default function AddInvoice({ open, handler, products, users }) {
         userId,
       }
 
+      const { id } =
+        products && products.find((product) => product.id === productId)
+
       invoiceData.invoice.discount = Number(invoiceData.invoice.discount)
       invoiceData.invoice.subtotal = Number(invoiceData.invoice.subtotal)
 
       const response = await createInvoice({ authToken, invoiceData })
+      const updateQuery = {
+        quantity: counter,
+        id,
+      }
       if (!response) return null
-      console.log(invoiceData)
+      console.log(updateQuery)
+      updateQuantity(updateQuery)
       resetState()
     } catch (error) {
       console.log(error)
     }
   }
-
-  const quantity = useRef(0)
-  const addQuantity = () => setCounter((quantity.current += 1))
-  const removeQuantity = () =>
-    counter > 0 ? setCounter((quantity.current -= 1)) : null
 
   const removeButtonClass =
     counter <= 0
@@ -103,105 +115,56 @@ export default function AddInvoice({ open, handler, products, users }) {
           <form className="w-full" onSubmit={handleSubmit}>
             <div className="grid sm:grid-cols-1 md:lg:grid-cols-2 lg:grid-cols-2 gap-4 mt-4">
               <div className="flex flex-col">
-                <Typography variant="h6" color="gray" className="font-bold">
-                  Date
-                </Typography>
-                <Input
-                  size="md"
-                  placeholder="date"
-                  name="date"
-                  type="date"
+                <InputField
                   value={query.date}
-                  onChange={handleQueryChange}
+                  name="date"
+                  placeholder="date"
+                  title="Date"
+                  type="date"
+                  handleChange={handleQueryChange}
                 />
               </div>
               <div className="flex flex-col">
-                <Typography variant="h6" color="gray" className="font-bold">
-                  Client
-                </Typography>
-                <Select
-                  value={userId}
-                  name="userId"
-                  selected={(element) =>
-                    element &&
-                    React.cloneElement(element, {
-                      disabled: true,
-                      className:
-                        'flex items-center opacity-100 px-0 gap-2 pointer-events-none',
-                    })
-                  }
-                  onChange={handleUserChange}
-                >
-                  {users &&
-                    users.map((user) => (
-                      <Option
-                        key={user.userId}
-                        value={user.userId}
-                        disabled={false}
-                      >
-                        {user.username}
-                      </Option>
-                    ))}
-                </Select>
+                <SelectField
+                  title="Client"
+                  selectValue={userId}
+                  selectName="userId"
+                  handleChange={handleUserChange}
+                  elements={users}
+                />
               </div>
               <div className="flex flex-col">
-                <Typography variant="h6" color="gray" className="font-bold">
-                  Discount
-                </Typography>
-                <Input
-                  size="md"
-                  placeholder="0%"
-                  name="discount"
-                  type="number"
+                <InputField
                   value={query.discount}
-                  onChange={handleQueryChange}
+                  name="discount"
+                  placeholder="0%"
+                  title="Discount"
+                  type="number"
+                  handleChange={handleQueryChange}
                 />
               </div>
               <div className="flex flex-col">
-                <Typography variant="h6" color="gray" className="font-bold">
-                  Product
-                </Typography>
-                <Select
-                  value={productId}
-                  name="productId"
-                  selected={(element) =>
-                    element &&
-                    React.cloneElement(element, {
-                      disabled: true,
-                      className:
-                        'flex items-center opacity-100 px-0 gap-2 pointer-events-none',
-                    })
-                  }
-                  onChange={handleProductChange}
-                >
-                  {products &&
-                    products.map((product) => (
-                      <Option
-                        key={product.id}
-                        value={product.id}
-                        disabled={false}
-                      >
-                        {product.productName}
-                      </Option>
-                    ))}
-                </Select>
+                <SelectField
+                  title="Products"
+                  selectValue={productId}
+                  selectName="productId"
+                  handleChange={handleProductChange}
+                  elements={products}
+                />
               </div>
               <div className="flex flex-col">
-                <Typography variant="h6" color="gray" className="font-bold">
-                  Subtotal
-                </Typography>
-                <Input
-                  size="md"
-                  placeholder="0"
-                  type="text"
-                  name="subtotal"
+                <InputField
                   value={query.subtotal}
-                  onChange={handleQueryChange}
+                  name="subtotal"
+                  placeholder="0"
+                  title="Subtotal"
+                  type="text"
+                  handleChange={handleQueryChange}
                 />
               </div>
               <div className="flex flex-col">
                 <Typography variant="h6" color="gray" className="font-bold">
-                  Product Quantity
+                  Product Quantity:
                 </Typography>
                 <div className="flex flex-row justify-between items-center w-10 h-9 gap-2">
                   <span className="font-bold text-blue-gray-300 text-[24px]">
@@ -209,11 +172,11 @@ export default function AddInvoice({ open, handler, products, users }) {
                   </span>
                   <div className="flex flex-row gap-2">
                     <BsFillPlusSquareFill
-                      onClick={addQuantity}
+                      onClick={addCallBack}
                       className="w-5 h-5 cursor-pointer"
                     />
                     <BsDashSquareFill
-                      onClick={removeQuantity}
+                      onClick={removeCallBack}
                       className={removeButtonClass}
                     />
                   </div>

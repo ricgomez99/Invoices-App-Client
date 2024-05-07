@@ -39,8 +39,8 @@ export const getUsers = async () => {
 const modelUsers = (users) =>
   users &&
   users.map((item) => ({
-    userId: item.id,
-    username: item.username,
+    id: item.id,
+    name: item.username,
     email: item.email,
     role: item.role,
   }))
