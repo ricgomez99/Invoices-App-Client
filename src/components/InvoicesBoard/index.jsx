@@ -12,6 +12,7 @@ export default function InvoicesBoard() {
     'Total',
     'Voucher',
     'Products',
+    'Options',
   ]
   const invoices = useInvoices()
 

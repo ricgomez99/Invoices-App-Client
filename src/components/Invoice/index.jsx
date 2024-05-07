@@ -5,15 +5,17 @@ import { ImFileText } from 'react-icons/im'
 import { FaListUl } from 'react-icons/fa'
 import ProductsModal from './../Modals/PorductsModal/index'
 import VoucherModal from '../Modals/VoucherModal'
+import useDeleteInvoice from '../../hooks/useDeleteInvoice'
 
 export default function Invoice({ ...props }) {
   const [showProducts, setShowProducts] = useState(false)
   const [showVoucher, setShowVoucher] = useState(false)
 
+  const deleteInvoice = useDeleteInvoice()
   const invoiceId = props.id.replaceAll('-', ' ').split(' ')[0]
   const date = props.date.replaceAll('-', '/').split('T')[0]
   const users = useUsers()
-  const user = users?.find((element) => element.userId === props.userId)
+  const user = users?.find((element) => element.id === props.userId)
 
   const classes = 'p-4 border-b border-gray-300'
   const displayProducts = () => {
@@ -22,6 +24,11 @@ export default function Invoice({ ...props }) {
 
   const displayVoucher = () => {
     setShowVoucher(!showVoucher)
+  }
+
+  const handleDelete = () => {
+    deleteInvoice(props.id)
+    console.log('deleted')
   }
 
   return (
@@ -33,7 +40,7 @@ export default function Invoice({ ...props }) {
       </td>
       <td className={classes}>
         <Typography variant="small" color="black">
-          {user?.username}
+          {user?.name}
         </Typography>
       </td>
       <td className={classes}>
@@ -61,6 +68,12 @@ export default function Invoice({ ...props }) {
       </td>
       <td className={classes}>
         <FaListUl className="cursor-pointer" onClick={displayProducts} />
+      </td>
+      <td>
+        <div className="flex flex-row w-full h-full">
+          <button onClick={handleDelete}>Delete</button>
+          <button>Update</button>
+        </div>
       </td>
       {showProducts ? (
         <ProductsModal

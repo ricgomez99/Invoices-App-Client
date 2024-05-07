@@ -42,6 +42,27 @@ export const createInvoice = async ({ authToken, invoiceData }) => {
   }
 }
 
+export const deleteInvoice = async ({ id, authToken }) => {
+  try {
+    const { data } = await axios.delete(`${url}/invoices/${id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${authToken}`,
+      },
+    })
+
+    if (!data) return null
+
+    return data
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      console.log(error)
+    } else if (error instanceof Error) {
+      console.log(error.message)
+    }
+  }
+}
+
 const mapInvoices = (invoices) => {
   return (
     invoices &&
