@@ -2,7 +2,8 @@ import useUsers from '../../hooks/useUsers'
 import { useState, useCallback } from 'react'
 import { Typography } from '@material-tailwind/react'
 import { ImFileText } from 'react-icons/im'
-import { FaListUl } from 'react-icons/fa'
+import { MdDeleteForever } from 'react-icons/md'
+import { FaListUl, FaPenSquare } from 'react-icons/fa'
 import ProductsModal from './../Modals/PorductsModal/index'
 import VoucherModal from '../Modals/VoucherModal'
 import useDeleteInvoice from '../../hooks/useDeleteInvoice'
@@ -78,9 +79,11 @@ export default function Invoice({ ...props }) {
         <FaListUl className="cursor-pointer" onClick={displayProducts} />
       </td>
       <td>
-        <div className="flex flex-row w-full h-full">
-          <button onClick={handleDelete}>Delete</button>
-          {userRole === 'admin' ? <button>Update</button> : null}
+        <div className="flex flex-row w-full h-full justify-center gap-2">
+          <MdDeleteForever onClick={handleDelete} className="cursor-pointer" />
+          {userRole === 'admin' ? (
+            <FaPenSquare className="cursor-pointer" />
+          ) : null}
         </div>
       </td>
       {showProducts ? (
