@@ -5,9 +5,10 @@ import {
   Button,
   CardFooter,
 } from '@material-tailwind/react'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 export default function WelcomeCard() {
+  const goTo = useNavigate()
   return (
     <Card className="w-96 mt-6 text-right">
       <CardBody>
@@ -24,9 +25,7 @@ export default function WelcomeCard() {
         </Typography>
       </CardBody>
       <CardFooter className="pt-0">
-        <Button>
-          <Link to="/login">Login</Link>
-        </Button>
+        <Button onClick={() => goTo('/login')}>Login</Button>
       </CardFooter>
     </Card>
   )
