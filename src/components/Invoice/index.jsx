@@ -3,25 +3,22 @@ import { useState, useCallback } from 'react'
 import { Typography } from '@material-tailwind/react'
 import { ImFileText } from 'react-icons/im'
 import { MdDeleteForever } from 'react-icons/md'
-import { FaListUl, FaPenSquare } from 'react-icons/fa'
+import { FaListUl } from 'react-icons/fa'
 import ProductsModal from './../Modals/PorductsModal/index'
 import VoucherModal from '../Modals/VoucherModal'
 import useDeleteInvoice from '../../hooks/useDeleteInvoice'
 import ConfirmationModal from '../Modals/Confirmation'
-import { useAuth } from '../../hooks/useAuth'
 
 export default function Invoice({ ...props }) {
   const [showProducts, setShowProducts] = useState(false)
   const [showVoucher, setShowVoucher] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
 
-  const { getUserRole } = useAuth()
   const deleteInvoice = useDeleteInvoice()
   const invoiceId = props.id.replaceAll('-', ' ').split(' ')[0]
   const date = props.date.replaceAll('-', '/').split('T')[0]
   const users = useUsers()
   const user = users?.find((element) => element.id === props.userId)
-  const userRole = getUserRole()
 
   const classes = 'p-4 border-b border-gray-300'
   const displayProducts = () => {
@@ -78,12 +75,12 @@ export default function Invoice({ ...props }) {
       <td className={classes}>
         <FaListUl className="cursor-pointer" onClick={displayProducts} />
       </td>
-      <td>
+      <td className={classes}>
         <div className="flex flex-row w-full h-full justify-center gap-2">
-          <MdDeleteForever onClick={handleDelete} className="cursor-pointer" />
-          {userRole === 'admin' ? (
-            <FaPenSquare className="cursor-pointer" />
-          ) : null}
+          <MdDeleteForever
+            onClick={handleDelete}
+            className="cursor-pointer w-4 h-4"
+          />
         </div>
       </td>
       {showProducts ? (

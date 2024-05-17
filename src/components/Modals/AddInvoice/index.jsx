@@ -92,7 +92,6 @@ export default function AddInvoice({ open, handler, products, users }) {
         id,
       }
       if (!response) return null
-      console.log(updateQuery)
       updateQuantity(updateQuery)
       resetState()
     } catch (error) {
