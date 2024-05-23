@@ -1,6 +1,4 @@
 import { Button } from '@material-tailwind/react'
-import useLogout from './../../hooks/useLogout'
-import { useNavigate } from 'react-router-dom'
 import InvoicesBoard from './../InvoicesBoard/index'
 import { useState } from 'react'
 import AddInvoice from '../Modals/AddInvoice'
@@ -13,14 +11,6 @@ export default function AdminDashboard() {
   const handleOpenForm = () => setIsOpen(!open)
   const users = useUsers()
   const products = useProducts()
-
-  const logOut = useLogout()
-  const goTo = useNavigate()
-
-  const handleSignOut = async () => {
-    await logOut()
-    goTo('/login')
-  }
 
   return (
     <>
@@ -35,9 +25,6 @@ export default function AdminDashboard() {
         </Button>
         <InvoicesBoard />
       </div>
-      <Button size="md" className="my-4" onClick={handleSignOut}>
-        Logout
-      </Button>
       {open ? (
         <AddInvoice
           open={open}
