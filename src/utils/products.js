@@ -47,6 +47,29 @@ export const updateProduct = async ({ authToken, id, quantity }) => {
   }
 }
 
+export const createProduct = async ({ data, authToken }) => {
+  try {
+    const formData = {
+      quantity: Number(data.quantity),
+      productName: data.productName,
+    }
+    const response = await axios.post(`${url}/products`, formData, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${authToken}`,
+      },
+    })
+
+    if (!response) throw new Error('Unable to create product')
+
+    console.log('product response: ', response.data)
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log(error.message)
+    }
+  }
+}
+
 const mappedProducts = (data) =>
   data &&
   data.map((product) => ({
