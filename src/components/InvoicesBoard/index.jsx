@@ -28,8 +28,6 @@ export default function InvoicesBoard() {
     invoices && invoices.slice(firstInvoiceIdx, lastInvoiceIdx)
   const pageChange = (pageNumber) => setCurrentPage(pageNumber)
 
-  console.log('invoices: ', currentInvoices)
-
   return (
     <>
       <Card className="w-full h-full rounded-none bg-[#f9f9f9] overflow-x-auto">
