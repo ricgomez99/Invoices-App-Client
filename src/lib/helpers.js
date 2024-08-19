@@ -21,6 +21,23 @@ export const signInUser = async ({ query }) => {
   }
 }
 
+export const createUser = async ({ username, email, password }) => {
+  try {
+    const { data } = await axios.post(
+      `${url}/users`,
+      { username, email, password },
+      {
+        headers: { 'Content-Type': 'application/json' },
+      }
+    )
+    return data
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log('Error: ', error.message)
+    }
+  }
+}
+
 export const refreshToken = async (token) => {
   try {
     const { data } = await axios.post(
