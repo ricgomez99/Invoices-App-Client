@@ -23,13 +23,10 @@ export const signInUser = async ({ query }) => {
 
 export const createUser = async ({ username, email, password }) => {
   try {
-    const { data } = await axios.post(
-      `${url}/users`,
-      { username, email, password },
-      {
-        headers: { 'Content-Type': 'application/json' },
-      }
-    )
+    const user = { username, email, password }
+    const { data } = await axios.post(`${url}/users`, user, {
+      headers: { 'Content-Type': 'application/json' },
+    })
     return data
   } catch (error) {
     if (error instanceof Error) {

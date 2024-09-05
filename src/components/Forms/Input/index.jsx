@@ -7,6 +7,7 @@ export default function InputField({
   label,
   name,
   register,
+  validation,
 }) {
   return (
     <>
@@ -19,11 +20,9 @@ export default function InputField({
         size="md"
         type={type}
         name={name}
-        value={value}
+        // value={value}
         placeholder={placeholder}
-        {...register(name, {
-          required: true,
-        })}
+        {...register(name, validation)}
       />
     </>
   )

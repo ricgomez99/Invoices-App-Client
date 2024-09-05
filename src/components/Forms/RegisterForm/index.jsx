@@ -1,21 +1,28 @@
 import { Card, CardBody, Button } from '@material-tailwind/react'
 import InputField from '../Input'
-// import useRegister from '../../../hooks/useRegister'
+import InputError from '../Error/InputError.jsx'
+import useRegister from '../../../hooks/useRegister'
 import { useForm } from 'react-hook-form'
+import {
+  confirmPassword,
+  email,
+  name,
+  password,
+} from '../validations/formValidations.js'
 
 export default function RegisterForm() {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm()
 
-  // const createUser = useRegister()
+  const createUser = useRegister()
   const onSubmit = handleSubmit((data) => {
-    console.log(data)
+    const { username, email, password } = data
+    createUser({ username, email, password })
   })
-
-  const errorMessageClass = 'text-sm text-red-400'
 
   return (
     <Card className="w-96 max-w-full p-4" shadow={true} color="white">
@@ -30,33 +37,42 @@ export default function RegisterForm() {
               placeholder="username"
               label="username"
               type="text"
-              value={register.username}
               register={register}
+              validation={name}
             />
             {errors.username && (
-              <span className={errorMessageClass}>username is required</span>
+              <InputError message={errors.username.message} />
             )}
             <InputField
               name="email"
               placeholder="email"
               label="email"
-              type="text"
-              value={register.email}
+              type="email"
               register={register}
+              validation={email}
             />
-            {errors.email && (
-              <span className={errorMessageClass}>email is required</span>
-            )}
+            {errors.email && <InputError message={errors.email.message} />}
             <InputField
               name="password"
               placeholder="password"
               label="password"
               type="password"
-              value={register.password}
               register={register}
+              validation={password}
             />
             {errors.password && (
-              <span className={errorMessageClass}>password is required</span>
+              <InputError message={errors.password.message} />
+            )}
+            <InputField
+              name="confirmPassword"
+              placeholder="confirm password"
+              label="confirm password"
+              type="password"
+              register={register}
+              validation={confirmPassword(watch)}
+            />
+            {errors.confirmPassword && (
+              <InputError message={errors.confirmPassword.message} />
             )}
           </div>
           <div className="w-full mt-4">
