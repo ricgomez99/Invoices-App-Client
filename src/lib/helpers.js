@@ -1,13 +1,18 @@
 import axios, { AxiosError } from 'axios'
 const url = import.meta.env.VITE_BASE_URL
 
-export const signInUser = async ({ query }) => {
+export const signInUser = async ({ data: query }) => {
   try {
-    const { data } = await axios.post(`${url}/auth/login`, query, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
+    console.log(query)
+    const { data } = await axios.post(
+      `${url}/auth/login`,
+      { query },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
     if (!data) return null
     const { accessToken, refreshToken, role } = data
 

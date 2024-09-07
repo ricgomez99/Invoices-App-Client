@@ -1,28 +1,26 @@
-import { useState } from 'react'
 import { signInUser } from '../../../lib/helpers'
 import { useAuth } from '../../../hooks/useAuth'
 import { useNavigate } from 'react-router-dom'
 import { Card, Button } from '@material-tailwind/react'
 import InputField from './../Input/index'
+import { useForm } from 'react-hook-form'
+import { password, email } from '../validations/formValidations.js'
+import InputError from '../Error/InputError'
 
 export default function LoginForm() {
-  const [query, setQuery] = useState({
-    email: '',
-    password: '',
-  })
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm()
 
   const { saveTokens, saveUserRole } = useAuth()
   const goTo = useNavigate()
 
-  const handleChange = (event) => {
-    const { name, value } = event.target
-    setQuery((prev) => ({ ...prev, [name]: value }))
-  }
-
-  const handleSubmit = async (event) => {
-    event.preventDefault()
+  const onSubmit = handleSubmit(async (data) => {
     try {
-      const { accessToken, refreshToken, role } = await signInUser({ query })
+      const { accessToken, refreshToken, role } = await signInUser({ data })
       saveUserRole(role)
       if (accessToken && refreshToken) {
         saveTokens({ access: accessToken, refresh: refreshToken })
@@ -30,11 +28,13 @@ export default function LoginForm() {
       }
       return null
     } catch (error) {
-      console.log(error)
+      if (error instanceof Error) {
+        console.log(error)
+      }
     } finally {
-      setQuery({ email: '', password: '' })
+      reset()
     }
-  }
+  })
 
   return (
     <Card
@@ -50,25 +50,27 @@ export default function LoginForm() {
 
       <form
         className="my-3 w-[100%] max-w-[450px] min-w-64"
-        onSubmit={handleSubmit}
+        onSubmit={onSubmit}
       >
         <div className="mb-1 w-[100%] flex flex-col gap-4">
           <InputField
-            value={query.email}
             name="email"
             placeholder="Email"
             title="Email"
-            type="text"
-            handleChange={handleChange}
+            type="email"
+            register={register}
+            validation={email}
           />
+          {errors.email && <InputError message={errors.email.message} />}
           <InputField
-            value={query.password}
             name="password"
             placeholder="Password"
             title="Password"
             type="password"
-            handleChange={handleChange}
+            register={register}
+            validation={password}
           />
+          {errors.password && <InputError message={errors.password.message} />}
         </div>
         <div className="flex justify-center items-center mt-5">
           <Button type="submit" className="w-[100%]">

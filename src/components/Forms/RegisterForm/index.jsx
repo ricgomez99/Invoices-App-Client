@@ -16,12 +16,22 @@ export default function RegisterForm() {
     handleSubmit,
     formState: { errors },
     watch,
+    reset,
   } = useForm()
 
   const createUser = useRegister()
-  const onSubmit = handleSubmit((data) => {
+  const onSubmit = handleSubmit(async (data) => {
     const { username, email, password } = data
-    createUser({ username, email, password })
+    try {
+      await createUser({ username, email, password })
+      alert('user created')
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log(error.message)
+      }
+    } finally {
+      reset()
+    }
   })
 
   return (
