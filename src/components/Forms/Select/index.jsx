@@ -1,20 +1,13 @@
 import { Select, Option, Typography } from '@material-tailwind/react'
 import React from 'react'
 
-export default function SelectField({
-  title,
-  selectValue,
-  selectName,
-  handleChange,
-  elements,
-}) {
+export default function SelectField({ title, selectName, elements, register }) {
   return (
     <>
-      <Typography variant="h6" color="gray" className="font-bold">
+      <Typography variant="small" color="gray" className="font-bold">
         {title}
       </Typography>
       <Select
-        value={selectValue}
         name={selectName}
         selected={(element) =>
           element &&
@@ -24,7 +17,7 @@ export default function SelectField({
               'flex items-center opacity-100 px-0 gap-2 pointer-events-none',
           })
         }
-        onChange={handleChange}
+        {...register(selectName)}
       >
         {elements &&
           elements.map((element) => (

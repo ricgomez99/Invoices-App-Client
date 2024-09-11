@@ -13,8 +13,15 @@ import { useAuth } from '../../../hooks/useAuth'
 import useUpdateProduct from '../../../hooks/useUpdateProduct'
 import InputField from '../../Forms/Input'
 import SelectField from '../../Forms/Select'
+import { useForm } from 'react-hook-form'
 
 export default function AddInvoice({ open, handler, products, users }) {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm()
   const [counter, setCounter] = useState(0)
   const [query, setQuery] = useState({
     date: '',
@@ -29,6 +36,7 @@ export default function AddInvoice({ open, handler, products, users }) {
   const updateQuantity = useUpdateProduct()
 
   const quantity = useRef(0)
+
   const addQuantity = () => setCounter((quantity.current += 1))
   const removeQuantity = () =>
     counter > 0 ? setCounter((quantity.current -= 1)) : null
@@ -36,30 +44,30 @@ export default function AddInvoice({ open, handler, products, users }) {
   const addCallBack = useCallback(addQuantity, [quantity, counter])
   const removeCallBack = useCallback(removeQuantity, [quantity, counter])
 
-  const handleQueryChange = (event) => {
-    const { name, value } = event.target
-    setQuery((prev) => ({ ...prev, [name]: value }))
-    calculateTotal()
-  }
+  // const handleQueryChange = (event) => {
+  //   const { name, value } = event.target
+  //   setQuery((prev) => ({ ...prev, [name]: value }))
+  //   calculateTotal()
+  // }
 
-  const handleUserChange = (event) => {
-    setUserId(event)
-  }
+  // const handleUserChange = (event) => {
+  //   setUserId(event)
+  // }
 
-  const handleProductChange = (event) => {
-    setProductId(event)
-  }
+  // const handleProductChange = (event) => {
+  //   setProductId(event)
+  // }
 
-  const resetState = () => {
-    setQuery({
-      date: '',
-      subtotal: 0,
-      discount: 0,
-    })
-    setProductId('')
-    setUserId('')
-    setTotal(0)
-  }
+  // const resetState = () => {
+  //   setQuery({
+  //     date: '',
+  //     subtotal: 0,
+  //     discount: 0,
+  //   })
+  //   setProductId('')
+  //   setUserId('')
+  //   setTotal(0)
+  // }
 
   const calculateTotal = () => {
     if (query.subtotal > 0) {
@@ -72,34 +80,34 @@ export default function AddInvoice({ open, handler, products, users }) {
     return null
   }
 
-  const handleSubmit = async (event) => {
-    event.preventDefault()
-    try {
-      const invoiceData = {
-        invoice: { ...query, total },
-        productIds: [productId],
-        userId,
-      }
+  const onSubmit = handleSubmit(async (data) => {
+    // try {
+    //   const invoiceData = {
+    //     invoice: { ...query, total },
+    //     productIds: [productId],
+    //     userId,
+    //   }
 
-      const { id } =
-        products && products.find((product) => product.id === productId)
+    //   const { id } =
+    //     products && products.find((product) => product.id === productId)
 
-      invoiceData.invoice.discount = Number(invoiceData.invoice.discount)
-      invoiceData.invoice.subtotal = Number(invoiceData.invoice.subtotal)
+    //   invoiceData.invoice.discount = Number(invoiceData.invoice.discount)
+    //   invoiceData.invoice.subtotal = Number(invoiceData.invoice.subtotal)
 
-      const response = await createInvoice({ authToken, invoiceData })
-      const updateQuery = {
-        quantity: counter,
-        id,
-      }
-      if (!response) return null
-      updateQuantity(updateQuery)
-      resetState()
-      handler(() => false)
-    } catch (error) {
-      console.log(error)
-    }
-  }
+    //   const response = await createInvoice({ authToken, invoiceData })
+    //   const updateQuery = {
+    //     quantity: counter,
+    //     id,
+    //   }
+    //   if (!response) return null
+    //   updateQuantity(updateQuery)
+    //   resetState()
+    //   handler(() => false)
+    // } catch (error) {
+    //   console.log(error)
+    // }
+    console.log(data)
+  })
 
   const removeButtonClass =
     counter <= 0
@@ -115,16 +123,16 @@ export default function AddInvoice({ open, handler, products, users }) {
               <Typography variant="h4" color="black" className="font-bold">
                 Add a new Invoice
               </Typography>
-              <form className="w-full" onSubmit={handleSubmit}>
+              <form className="w-full" onSubmit={onSubmit}>
                 <div className="grid sm:grid-cols-1 md:lg:grid-cols-2 lg:grid-cols-2 gap-4 mt-4">
                   <div className="flex flex-col">
                     <InputField
-                      value={query.date}
                       name="date"
+                      label="Date"
                       placeholder="date"
-                      title="Date"
+                      title="0%"
                       type="date"
-                      handleChange={handleQueryChange}
+                      register={register}
                     />
                   </div>
                   <div className="flex flex-col">
@@ -132,18 +140,18 @@ export default function AddInvoice({ open, handler, products, users }) {
                       title="Client"
                       selectValue={userId}
                       selectName="userId"
-                      handleChange={handleUserChange}
                       elements={users}
+                      register={register}
                     />
                   </div>
                   <div className="flex flex-col">
                     <InputField
-                      value={query.discount}
                       name="discount"
-                      placeholder="0%"
+                      label="Discount"
+                      placeholder="Discount"
                       title="Discount"
                       type="number"
-                      handleChange={handleQueryChange}
+                      register={register}
                     />
                   </div>
                   <div className="flex flex-col">
@@ -151,18 +159,18 @@ export default function AddInvoice({ open, handler, products, users }) {
                       title="Products"
                       selectValue={productId}
                       selectName="productId"
-                      handleChange={handleProductChange}
                       elements={products}
+                      register={register}
                     />
                   </div>
                   <div className="flex flex-col">
                     <InputField
-                      value={query.subtotal}
                       name="subtotal"
+                      label="Subtotal"
                       placeholder="0"
                       title="Subtotal"
                       type="text"
-                      handleChange={handleQueryChange}
+                      register={register}
                     />
                   </div>
                   <div className="flex flex-col">
@@ -194,7 +202,7 @@ export default function AddInvoice({ open, handler, products, users }) {
                     </span>
                   </div>
                 </div>
-                <Button className="my-3" type="submit">
+                <Button className="my-3 w-full" type="submit">
                   Create
                 </Button>
               </form>

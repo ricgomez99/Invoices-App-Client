@@ -6,7 +6,7 @@ export const signInUser = async ({ data: query }) => {
     console.log(query)
     const { data } = await axios.post(
       `${url}/auth/login`,
-      { query },
+      { ...query },
       {
         headers: {
           'Content-Type': 'application/json',
@@ -14,6 +14,7 @@ export const signInUser = async ({ data: query }) => {
       }
     )
     if (!data) return null
+    console.log('data:', data)
     const { accessToken, refreshToken, role } = data
 
     return { accessToken, refreshToken, role }
