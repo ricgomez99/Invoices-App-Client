@@ -1,5 +1,4 @@
-import { Select, Option, Typography } from '@material-tailwind/react'
-import React from 'react'
+import { Typography } from '@material-tailwind/react'
 
 export default function SelectField({ title, selectName, elements, register }) {
   return (
@@ -7,25 +6,23 @@ export default function SelectField({ title, selectName, elements, register }) {
       <Typography variant="small" color="gray" className="font-bold">
         {title}
       </Typography>
-      <Select
+      <select
+        className="py-2 px-1 text-sm font-normal text-blue-gray-700 rounded-md bg-white ring-1 ring-blue-gray-200"
         name={selectName}
-        selected={(element) =>
-          element &&
-          React.cloneElement(element, {
-            disabled: true,
-            className:
-              'flex items-center opacity-100 px-0 gap-2 pointer-events-none',
-          })
-        }
         {...register(selectName)}
       >
         {elements &&
           elements.map((element) => (
-            <Option key={element.id} value={element.id} disabled={false}>
+            <option
+              className="flex items-center opacity-100 px-0 gap-2 pointer-events-none"
+              key={element.id}
+              value={element.id}
+              disabled={false}
+            >
               {element.name}
-            </Option>
+            </option>
           ))}
-      </Select>
+      </select>
     </>
   )
 }
