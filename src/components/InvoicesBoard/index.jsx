@@ -1,27 +1,22 @@
 import useInvoices from '../../hooks/useInvoices'
-import Invoice from '../Invoice'
-import { Card, Typography } from '@material-tailwind/react'
 import Pagination from '../Pagination'
 import { useState } from 'react'
+import InvoiceCard from '../InvoiceCard'
 
 export default function InvoicesBoard() {
   const tableHead = [
-    '# Invoice',
+    'Invoice',
     'Client',
     'Date',
     'Subtotal',
     'Discount',
     'Total',
-    'Voucher',
-    'Products',
-    'Options',
   ]
   const invoices = useInvoices()
   const [currentPage, setCurrentPage] = useState(1)
 
   // eslint-disable-next-line no-unused-vars
   const [invoicePerPage, setInvoicePerPage] = useState(5)
-
   const lastInvoiceIdx = currentPage * invoicePerPage
   const firstInvoiceIdx = lastInvoiceIdx - invoicePerPage
   const currentInvoices =
@@ -29,42 +24,42 @@ export default function InvoicesBoard() {
   const pageChange = (pageNumber) => setCurrentPage(pageNumber)
 
   return (
-    <>
-      <Card className="w-full h-full rounded-none bg-[#f9f9f9] overflow-x-auto">
-        <table className="w-full min-w-max table-auto text-center">
-          <thead>
-            <tr>
-              {tableHead.map((item) => (
-                <th
-                  key={item}
-                  className="p-4 border-b border-t border-gray-300"
-                >
-                  <Typography variant="h5" color="black" className="font-bold">
-                    {item}
-                  </Typography>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {currentInvoices &&
-              currentInvoices.map((invoice) => (
-                <tr key={invoice.id}>
-                  <Invoice {...invoice} />
-                </tr>
-              ))}
-          </tbody>
-        </table>
-      </Card>
-      {invoices ? (
-        <div className="flex justify-center items-center py-4">
-          <Pagination
-            invoices={invoices.length}
-            invoicePerPage={invoicePerPage}
-            pageChange={pageChange}
-          />
-        </div>
-      ) : null}
-    </>
+    <section className="w-full h-full flex flex-col gap-6">
+      <div className="bg-[#1114] w-full h-11 rounded-md items-center flex flex-row justify-between px-2">
+        {tableHead &&
+          tableHead.map((title) => (
+            <span
+              className="text-white font-semibold text-base text-center min-w-16"
+              key={title}
+            >
+              {title}
+            </span>
+          ))}
+      </div>
+      <aside>
+        {currentInvoices
+          ? currentInvoices.map((invoice) => (
+              <InvoiceCard
+                id={invoice.id}
+                date={invoice.date}
+                discount={invoice.discount}
+                subtotal={invoice.subtotal}
+                total={invoice.total}
+                userId={invoice.userId}
+                key={invoice.id}
+              />
+            ))
+          : null}
+        {invoices ? (
+          <div className="flex justify-center items-center py-5">
+            <Pagination
+              invoices={invoices.length}
+              invoicePerPage={invoicePerPage}
+              pageChange={pageChange}
+            />
+          </div>
+        ) : null}
+      </aside>
+    </section>
   )
 }

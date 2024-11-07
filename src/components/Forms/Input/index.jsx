@@ -1,26 +1,24 @@
-import { Typography, Input } from '@material-tailwind/react'
+import { Input } from '@material-tailwind/react'
 
 export default function InputField({
-  value,
-  handleChange,
   type,
   placeholder,
-  title,
+  label,
   name,
+  register,
+  validation,
 }) {
   return (
     <>
-      <Typography variant="h6" color="gray" className="font-bold">
-        {title}
-      </Typography>
       <Input
-        className="text-[#111] p-2"
+        className="text-black p-2"
+        id={name}
         size="md"
         type={type}
         name={name}
-        value={value}
+        label={label}
         placeholder={placeholder}
-        onChange={handleChange}
+        {...register(name, validation)}
       />
     </>
   )

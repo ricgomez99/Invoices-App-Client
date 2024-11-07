@@ -46,7 +46,7 @@ export default function Invoice({ ...props }) {
       </td>
       <td className={classes}>
         <Typography variant="small" color="black">
-          {user?.name}
+          <>{user && user.name}</>
         </Typography>
       </td>
       <td className={classes}>

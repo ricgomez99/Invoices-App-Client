@@ -1,14 +1,20 @@
 import axios, { AxiosError } from 'axios'
 const url = import.meta.env.VITE_BASE_URL
 
-export const signInUser = async ({ query }) => {
+export const signInUser = async ({ data: query }) => {
   try {
-    const { data } = await axios.post(`${url}/auth/login`, query, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
+    console.log(query)
+    const { data } = await axios.post(
+      `${url}/auth/login`,
+      { ...query },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
     if (!data) return null
+    console.log('data:', data)
     const { accessToken, refreshToken, role } = data
 
     return { accessToken, refreshToken, role }
@@ -17,6 +23,20 @@ export const signInUser = async ({ query }) => {
       console.log(error)
     } else if (error instanceof Error) {
       console.log(error.message)
+    }
+  }
+}
+
+export const createUser = async ({ username, email, password }) => {
+  try {
+    const user = { username, email, password }
+    const { data } = await axios.post(`${url}/users`, user, {
+      headers: { 'Content-Type': 'application/json' },
+    })
+    return data
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log('Error: ', error.message)
     }
   }
 }

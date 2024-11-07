@@ -3,6 +3,7 @@ import { ProtectedRoutes } from './ProtectedRoutes'
 import PersistLogin from '../hooks/PersistLogin'
 import Home from '../pages/Home'
 import Login from '../pages/Login'
+import Register from '../pages/Register'
 import Dashboard from '../pages/Dashboard'
 
 export default function Routes() {
@@ -14,6 +15,10 @@ export default function Routes() {
     {
       path: '/login',
       element: <Login />,
+    },
+    {
+      path: '/register',
+      element: <Register />,
     },
     {
       path: '/',

@@ -5,6 +5,7 @@ export default function Navbar() {
   const navLinks = [
     { path: '/', name: 'Home' },
     { path: '/login', name: 'Login' },
+    { path: '/register', name: 'Register' },
   ]
   return (
     <nav className=" bg-white w-[100%] justify-center absolute items-center max-w-[100%] flex flex-col h-20 shadow-md">

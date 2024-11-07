@@ -11,16 +11,17 @@ export default function AdminDashboard() {
   const [open, setIsOpen] = useState(false)
   const [openProductsForm, setOpenProductsForm] = useState(false)
   const handleOpenForm = useCallback(() => setIsOpen(!open), [open])
-  const handleOpenProductForm = useCallback(() =>
-    setOpenProductsForm(!openProductsForm)
+  const handleOpenProductForm = useCallback(
+    () => setOpenProductsForm(!openProductsForm),
+    [openProductsForm]
   )
   const users = useUsers()
   const products = useProducts()
 
   return (
     <>
-      <div className="w-[100%] h-auto bg-[#f9f9f9] p-6 rounded-lg max-w-[800px] flex flex-col justify-center items-center">
-        <div className="w-auto flex flex-row self-start items-start justify-between gap-2">
+      <div className="w-full h-auto bg-[#f9f9f9] p-6 rounded-lg max-w-[1366px] flex flex-col justify-center items-center">
+        <div className="w-full flex flex-row self-start items-start justify-between gap-2">
           <Button
             size="lg"
             className="my-3 self-start flex items-center gap-3 cursor-pointer"
